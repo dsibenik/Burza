@@ -5,19 +5,18 @@
 #           dsibenik@live.com
 #
 
-
 ################################################################################
 ###libraries:
-activate <- function( name ){
-  if( any(grepl(name, installed.packages())) ){
-    library(name, character.only=TRUE)
-  }
-  else{
-    install.packages(name)
-    library(name, character.only=TRUE)
-  }
-}
-activate("readxl")
+#activate <- function( name ){
+#  if( any(grepl(name, installed.packages())) ){
+#    library(name, character.only=TRUE)
+#  }
+#  else{
+#    install.packages(name)
+#    library(name, character.only=TRUE)
+#  }
+#}
+#activate("readxl")
 
 
 ################################################################################
@@ -26,24 +25,34 @@ activate("readxl")
 get_data <- function(name){
   #casts data in a specific form
 
-  data <- read_xlsx( paste("./data/",name,".xlsx", sep="") )
-  data <- data[ c(1,4) ]
-  data <- data[ nrow(data):1 , ]
-  data <- data.frame(data$Date, data$Last)
+  data <- read.csv( paste("./data/",name,".csv", sep="") )
+  data <- data[ c(1,5) ]
+  data <- data[ nrow(data):1, ]
+  data$Last <- sub("\\.", "", data$Last)
+  data$Last <- as.numeric(sub(",", ".", data$Last) )
+  data <- data.frame(data$Date, data$Last )
   colnames(data) <- c("Date", "Close")
 
   return(data)
 }
 
-
 returns_mon <- function( name ){
 
   data <- get_data(name)
 
-  data$Date <- format( data$Date, "%m/%Y")
+  data$Date <- as.Date(data$Date, "%d.%m.%Y")
+  data$Date <- format(data$Date, "%m/%Y")
 
-  close <- data[!duplicated(data$Date, fromLast=TRUE),"Close"]
-  date <- data[!duplicated(data$Date, fromLast=TRUE),"Date"]
+  data <- data[ !is.na(data$Close), ]
+  data <- data[ !duplicated(data$Date, fromLast=TRUE), ]
+
+  returns_mon <- data.frame( 0, 0 )
+  colnames(returns_mon) <- c("Date", "Value")
+  if( nrow(data) == 0 )
+    return( returns_mon )
+
+  close <- data$Close
+  date <- data$Date
   date <- date[-1]
 
   returns_mon <- numeric( length(close)-1 )
@@ -89,9 +98,8 @@ returns_kor <- function( names ){
 
 ################################################################################
 ###calculation:
-setwd("/home/dsibenik/Downloads/Burza/")
 
-names <- read.table("stock_names.txt", sep="")
+names <- read.table("list_work.txt", sep="")
 names <- as.vector(names[,1])
 
 n <- length(names)
