@@ -1,2 +1,2 @@
 # Burza
-A collection of R and Bash scripts that calculates some statistical data for given stocks.
+A collection of python3 and R scripts that calculate some statistical data for given stocks.
