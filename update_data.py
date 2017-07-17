@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #skripta koja radi parsiranje svih dionica za sve podatke od pocetka mjerenja
 
 from selenium import webdriver

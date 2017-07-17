@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #skripta koja dohvaca sve dionice sa zagrebacke burze i sprema ih u txt file
 
 from selenium import webdriver
