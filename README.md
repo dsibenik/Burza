@@ -1,14 +1,14 @@
 # Burza
-A collection of python3 and R scripts that calculate some statistical data for given stocks.
+A collection of python3 and R scripts that fetch price data and calculate some indicators from Zagreb Stock Exchange
 
-## Requirements:
+### Requirements:
 - Python 3.x
 - Python packages: bs4, phantomjs, csv, subprocess, selenium, BeautifulSoup
 - R
 
 --------
 
-## Usage:
+### Usage:
 - Run start.py
 - Select wanted stock symbols using 6
 - Update stock data using 8
@@ -16,11 +16,7 @@ A collection of python3 and R scripts that calculate some statistical data for g
 
 --------
 
-## Note:
+### Note:
 - Stock data will be saved in data/
 
 --------
-
-## Note:
-- Stock data will be saved in data/
-
