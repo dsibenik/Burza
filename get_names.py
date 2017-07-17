@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#skripta koja dohvaca sve dionice sa zagrebacke burze i sprema ih u txt file
+#fetch ALL available stock symbols and save them to "list_full.txt"
 
 from selenium import webdriver
 from bs4 import BeautifulSoup

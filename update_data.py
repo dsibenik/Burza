@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#skripta koja radi parsiranje svih dionica za sve podatke od pocetka mjerenja
+#fetch ALL historical stock data
 
 from selenium import webdriver
 from bs4 import BeautifulSoup

@@ -20,3 +20,13 @@ A collection of python3 and R scripts that fetch price data and calculate some i
 - Stock data will be saved in data/
 
 --------
+
+### TO DO:
+- Fetch only missing stock data
+- Calculate only from a specified date
+- Add covariance
+- Add graphs
+- Add portfolio
+
+--------
+
