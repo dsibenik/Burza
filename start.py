@@ -3,31 +3,45 @@
 import sys, os
 import subprocess
 import update_data
+import csv
 
 def wait_key():
     ''' Wait for a key press on the console and return it. '''
     result = None
     if os.name == 'nt':
-        import msvcrt
-        result = msvcrt.getch()
+#        import msvcrt
+        result = input()# msvcrt.getch()
         os.system('cls')
     else:
-        import termios
-        fd = sys.stdin.fileno()
-
-        oldterm = termios.tcgetattr(fd)
-        newattr = termios.tcgetattr(fd)
-        newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
-        termios.tcsetattr(fd, termios.TCSANOW, newattr)
-
-        try:
-            result = sys.stdin.read(1)
-        except IOError:
-            pass
-        finally:
-            termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+#        import termios
+#        fd = sys.stdin.fileno()
+#
+#        oldterm = termios.tcgetattr(fd)
+#        newattr = termios.tcgetattr(fd)
+#        newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
+#        termios.tcsetattr(fd, termios.TCSANOW, newattr)
+#
+#        try:
+#            result = sys.stdin.read(1)
+#        except IOError:
+#            pass
+#        finally:
+#            termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
+        result = input()
         os.system('clear')
     return result
+
+def output_columns(filename):
+	rows = []
+	file = open(filename, "r")
+
+	for line in csv.reader(file, delimiter=',', quotechar='"'):
+		rows.append(line)
+	file.close
+
+	widths = [max(map(len,col))+2 for col in zip(*rows)]
+	for row in rows:
+		print("".join((val.ljust(width) for val, width in zip(row,widths))))
 
 class case:
     def update_list_full(self):
@@ -57,7 +71,7 @@ class case:
                 f = open("list_work.txt", "a")
                 f.write(lst_full[int(num)-1] + "\n")
                 f.close()
-                print("Dodano", lst_full[int(num)-1])
+                print("\nDodano", lst_full[int(num)-1])
                 print("Any) Dodaj jos")
                 print("0) Izlaz")
                 if( wait_key() == str(0) ):
@@ -83,21 +97,25 @@ class case:
 
     def get_returns_mon(self):
         print("Racunam..")
-        subprocess.call ("./returns_mon.R")
-        print("Mjesecni povrati:")
-        [print(i) for i in update_data.citaj_simbole("output.txt")]
+        if( subprocess.call(["./returns_mon.R"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) ):
+            print("")
+            print("Greska! Jeste li azurirali podatke radne liste?")
+        else:
+            print("")
+            print("Mjesecni povrati:")
+            output_columns("output.txt")
         return
 
     def print_list_work(self):
         print("Radna lista dionica:")
-        [print(i) for i in update_data.citaj_simbole("list_work.txt") ]
+        output_columns("list_work.txt")
         return
 
 
 def main():    
     print("BURZA ########################")
     legend = { 
-        "1": "print_list_work",
+        "1":"print_list_work",
         "2":"get_returns_mon",
         "6":"update_list_work",
         "7":"clear_list_work",
@@ -106,7 +124,7 @@ def main():
 
     while(1):
         print("")
-        print("...................................")
+        print("...........................................")
 
         print("1) Prikaz radne liste dionica")
         print("2) Racunanje mjesecnih povrata radne liste")

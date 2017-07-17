@@ -22,6 +22,10 @@
 ################################################################################
 ### function declaration:
 
+specify_decimal <- function(x, k){
+	format(round(x, k), nsmall=k)
+}
+
 get_data <- function(name){
   #casts data in a specific form
 
@@ -109,11 +113,11 @@ returns <- data.frame( Name = character(n), Mean = numeric(n), StdDev=numeric(n)
 
 #calculate individual return statistics:
 for( i in 1:length(names) ){
-  returns[i,]$Mean <- mean( returns_mon(names[i])$Value )
-  returns[i,]$StdDev <- sd( returns_mon(names[i])$Value )
+  returns[i,]$Mean <- specify_decimal(mean( returns_mon(names[i])$Value ), 4)
+  returns[i,]$StdDev <- specify_decimal(sd( returns_mon(names[i])$Value ),4)
 }
 returns[,1] <- names
-write.table(returns, file="output.txt", row.names=FALSE)
+write.table(returns, file="output.txt",sep=",", row.names=FALSE)
 
 #calculate covariation matrix:
 #kov_mat <- returns_kov( names )
